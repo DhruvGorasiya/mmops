@@ -19,4 +19,3 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         with:
           config-path: .gitleaks.toml
-          args: detect --source . --no-banner
