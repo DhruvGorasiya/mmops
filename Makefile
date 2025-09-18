@@ -23,6 +23,29 @@ env-setup: ## Set up environment files
 		echo "direnv not found - install it for automatic env loading"; \
 	fi
 
+security-setup: ## Set up security tools and pre-commit hooks
+	@if command -v pre-commit >/dev/null 2>&1; then \
+		pre-commit install; \
+		echo "Pre-commit hooks installed"; \
+	else \
+		echo "pre-commit not found - install it first: brew install pre-commit"; \
+	fi
+	@if command -v gitleaks >/dev/null 2>&1; then \
+		echo "gitleaks is installed"; \
+	else \
+		echo "gitleaks not found - install it: brew install gitleaks"; \
+	fi
+
+security-test: ## Test secret detection with a dummy secret
+	@echo "Creating test file with fake secret..."
+	@echo "API_KEY=sk_live_1234567890abcdef" > test_secret.env
+	@echo "Adding to git and attempting commit (should fail)..."
+	@git add test_secret.env
+	@git commit -m "test secret detection" || echo "✅ Secret detection working - commit blocked as expected"
+	@git reset HEAD test_secret.env
+	@rm test_secret.env
+	@echo "Test completed - secret file cleaned up"
+
 dev: ## Start development environment
 	docker-compose up -d db
 	uvicorn main:app --reload --host 0.0.0.0 --port 8000

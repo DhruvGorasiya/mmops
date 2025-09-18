@@ -9,6 +9,8 @@
 - Python 3.11+
 - Node 18+
 - direnv (for environment management)
+- pre-commit (for security scanning)
+- gitleaks (for secret detection)
 
 ## Recommended Tools
 
@@ -23,15 +25,17 @@ git clone <repository-url>
 cd mmops
 ```
 
-### 2. Install direnv
+### 2. Install Security Tools
 ```bash
 # macOS (with Homebrew)
-brew install direnv
+brew install direnv pre-commit gitleaks
 
 # Linux
 curl -sfL https://direnv.net/install.sh | bash
+pip install pre-commit
+# Download gitleaks from releases page
 
-# Add to your shell profile (.bashrc, .zshrc, etc.)
+# Add direnv to your shell profile (.bashrc, .zshrc, etc.)
 echo 'eval "$(direnv hook bash)"' >> ~/.bashrc
 # or for zsh:
 echo 'eval "$(direnv hook zsh)"' >> ~/.zshrc
@@ -49,15 +53,16 @@ cp .env.example .env
 direnv allow
 ```
 
-### 4. Install Dependencies
+### 4. Install Dependencies & Security
 ```bash
 # Install all dependencies
 make install
 
-# Or install individually:
-pip install -r requirements.txt
-npm install
-go mod tidy
+# Set up security tools and pre-commit hooks
+make security-setup
+
+# Test secret detection (optional)
+make security-test
 ```
 
 ### 5. Start Development Environment
