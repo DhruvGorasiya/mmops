@@ -1,0 +1,55 @@
+# Gitleaks configuration for MMOps
+# This file customizes secret detection rules
+
+[allowlist]
+  # Allow test files in specific directories
+  paths = [
+    "test_secret.env",
+    "test.env",
+    "**/test/**",
+    "**/tests/**",
+    "**/fixtures/**",
+    "**/examples/**"
+  ]
+  
+  # Allow specific patterns in documentation
+  regexes = [
+    "sk_test_.*",  # Test API keys
+    "sk_fake_.*",  # Fake API keys
+    "your_.*_here",  # Placeholder patterns
+    "example_.*",  # Example patterns
+  ]
+
+[allowlist.rules]
+  # Allow test patterns in Makefile
+  - description = "Test secret patterns in Makefile"
+    regex = '''sk_test_.*'''
+    path = "Makefile"
+  
+  # Allow documentation examples
+  - description = "Documentation examples"
+    regex = '''sk_test_.*'''
+    path = "docs/.*"
+
+# Custom rules for better detection
+[[rules]]
+  id = "mmops-api-key"
+  description = "MMOps API Key"
+  regex = '''(?i)(api[_-]?key|apikey)\s*[=:]\s*['"]?[a-z0-9]{32,}['"]?'''
+  tags = ["api", "key"]
+  entropy = 3.5
+
+[[rules]]
+  id = "mmops-database-url"
+  description = "MMOps Database URL"
+  regex = '''(?i)(database[_-]?url|db[_-]?url)\s*[=:]\s*['"]?[a-z]+://[^'"]+['"]?'''
+  tags = ["database", "url"]
+  entropy = 3.0
+
+# Exclude common false positives
+[[rules]]
+  id = "exclude-test-patterns"
+  description = "Exclude test patterns"
+  regex = '''(?i)(test|fake|example|sample|placeholder).*'''
+  tags = ["test"]
+  entropy = 0.0

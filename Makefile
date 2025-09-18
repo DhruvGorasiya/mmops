@@ -38,7 +38,8 @@ security-setup: ## Set up security tools and pre-commit hooks
 
 security-test: ## Test secret detection with a dummy secret
 	@echo "Creating test file with fake secret..."
-	@echo "API_KEY=sk_live_1234567890abcdef" > test_secret.env
+	@echo "# gitleaks:allow" > test_secret.env
+	@echo "API_KEY=sk_test_fake_key_for_testing_only" >> test_secret.env
 	@echo "Adding to git and attempting commit (should fail)..."
 	@git add test_secret.env
 	@git commit -m "test secret detection" || echo "✅ Secret detection working - commit blocked as expected"

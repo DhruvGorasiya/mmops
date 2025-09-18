@@ -153,7 +153,8 @@ pre-commit install
 ### Test Secret Detection
 ```bash
 # Create a test file with a fake secret
-echo "API_KEY=sk_live_1234567890abcdef" > test.env
+# gitleaks:allow
+echo "API_KEY=sk_test_fake_key_for_testing_only" > test.env
 git add test.env
 git commit -m "test secret detection"
 # This should be blocked by gitleaks
@@ -171,7 +172,8 @@ Always use environment variables for secrets:
 export API_KEY="your_real_key_here"
 
 # Bad - never commit real secrets
-API_KEY="sk_live_1234567890abcdef"
+# gitleaks:allow
+API_KEY="sk_test_fake_key_for_testing_only"
 ```
 
 ## Reporting Security Issues

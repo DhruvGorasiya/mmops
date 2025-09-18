@@ -3,7 +3,7 @@ repos:
     rev: v8.18.4
     hooks:
       - id: gitleaks
-        args: ["--staged"]
+        args: ["--staged", "--config", ".gitleaks.toml"]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
